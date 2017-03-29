@@ -3,8 +3,7 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractLESS = new ExtractTextPlugin(
-  'styles/bundle.min.css',
-  { disabled:false, allChunks: true }
+  { filename:'styles/bundle.min.css', disable:false, allChunks: true }
 );
 
 // Webpack Production Config
@@ -12,9 +11,8 @@ module.exports = {
 
   context: path.join(__dirname, 'dist'), // copy-webpack-plugin output path
   entry: [
-    path.join(__dirname, "src/client/scripts/app.js"), // react,cjs -> js
-    path.join(__dirname, "src/client/styles/index.js") // less -> css
-    //path.join(__dirname, "src/client/images/index.js") // images -> images++
+    path.join(__dirname, "../client/scripts/app.js"), // react,cjs -> js
+    path.join(__dirname, "../client/styles/index.js") // less -> css
   ],
 
   output: {
@@ -24,8 +22,8 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.less$/,  exclude: /node_modules/, loader: extractLESS.extract(['css','less']) },
-      { test: /\.(js|jsx)$/i, exclude: /node_modules/, loader: 'babel-loader', query: {presets: ['es2015']} },
+      { test: /\.less$/,  exclude: /node_modules/, loader: extractLESS.extract(['css-loader','less-loader']) },
+      { test: /\.(js|jsx)$/i, exclude: /node_modules/, loader: 'babel-loader', query: {presets: ['es2015', 'stage-2']} },
       { test: /\.json$/, loader: 'json-loader' },
       { test: /.*\.(gif|png|jpe?g|svg)$/i, loaders: [
         'file?name=images/[name].[ext]',
@@ -36,8 +34,7 @@ module.exports = {
 
   plugins: [
     extractLESS,
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': { NODE_ENV: JSON.stringify('production') }
     }),
@@ -46,8 +43,8 @@ module.exports = {
       compress: { warnings: false }
     }),
     new CopyWebpackPlugin([
-      {from: path.join(__dirname, "src/client/index.html")},
-      {from: path.join(__dirname, "src/client/images"), to: "images"}
+      {from: path.join(__dirname, "../client/images"), to: "images"},
+	  {from: path.join(__dirname, "../client/fonts"), to: "fonts"}
     ])
   ]
 

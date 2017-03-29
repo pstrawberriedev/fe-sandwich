@@ -1,2 +1,9 @@
 # fe-sandwich
-Boilerplate for Express API Passthrough + Webpack FE App
+Boilerplate for Express + Webpack Web App
+
+*Server*
+- ``/server``
+
+*Front-End*
+- Webpack configs ``/config``
+- ``/client``
